@@ -61,6 +61,10 @@ export type Product = {
   badge?: string;
   /** The live site, when there is one. */
   url?: string;
+  /** A download for the product: shown as a button on the Work page. */
+  download?: { label: string; href: string; note: string };
+  /** Source code, when the product is open source. */
+  source?: string;
   /** Logo file in /public (SVG or PNG), shown on the plate when set. */
   logo?: string;
   /** Optional hand placement on the star chart: bearing in degrees clockwise
@@ -76,7 +80,13 @@ export const products: Product[] = [
     kind: "product",
     tagline: "The modern document workspace.",
     description:
-      "Read, edit, annotate, organize and sign documents, without the weight of legacy PDF software. Everything runs on your own machine.",
+      "A free, open-source desktop app for working with PDFs: read, edit text and images, fill forms, annotate, organize pages, redact, run OCR and sign with certificates, without the weight of legacy PDF software. Everything runs on your own machine, with no account and no uploads.",
+    download: {
+      label: "Download Folio for Windows",
+      href: "/downloads/Folio-Setup.exe",
+      note: "Version 0.1.0, 198 MB, free. Windows 10 or later, 64-bit. The installer is not yet code-signed, so Windows may ask you to confirm.",
+    },
+    source: "https://github.com/naledisandamela/folio",
     slot: "Product visual — FOLIO",
     logo: "/brand/folio.png",
     screens: [

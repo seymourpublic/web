@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Folio installer: ~200 MB, over GitHub's 100 MB file limit. Copy it in at deploy time.
+/public/downloads/*.exe

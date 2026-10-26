@@ -107,6 +107,34 @@ export default function WorkPage() {
                         <p className="m-0 mb-5 max-w-[460px] text-p1 text-ink-60">
                           {product.description}
                         </p>
+                        {product.download && (
+                          <div className="mb-5">
+                            <a
+                              href={product.download.href}
+                              download
+                              className="inline-flex items-center rounded-full bg-ink-100 px-5 py-2.5 text-cta text-on-night no-underline transition-opacity duration-200 hover:opacity-85"
+                            >
+                              {product.download.label}
+                            </a>
+                            <p className="m-0 mt-2 max-w-[460px] text-p2 text-ink-60">
+                              {product.download.note}
+                              {product.source && (
+                                <>
+                                  {" "}
+                                  <a
+                                    href={product.source}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="link"
+                                  >
+                                    View the source
+                                  </a>
+                                  .
+                                </>
+                              )}
+                            </p>
+                          </div>
+                        )}
                         {product.url && (
                           <a
                             href={product.url}
