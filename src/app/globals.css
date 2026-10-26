@@ -1,26 +1,759 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   Northstar design tokens — "Star chart"
+   Spec: docs/superpowers/specs/2026-10-23-star-chart-design-language.md
+   Raw values live here rather than in @theme because Tailwind v4's
+   @theme cannot switch on a media query; @theme inline below re-exports
+   them as utilities.
+   --------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  color-scheme: light dark;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Cool chart paper, not cream. */
+  --page: #f6f7f9;
+  --surface: #ffffff;
+  --well: #e8ecf2;
+
+  /* Navy ink: the colour of a printed chart, never a tinted black. */
+  --ink-100: #0e1b30;
+  --ink-80: rgba(14, 27, 48, 0.82);
+  --ink-60: rgba(14, 27, 48, 0.66);
+  --ink-44: rgba(14, 27, 48, 0.44);
+  --ink-12: rgba(14, 27, 48, 0.12);
+  --ink-4: rgba(14, 27, 48, 0.04);
+
+  /* Steel blue: links, focus and the mark on paper. */
+  --accent: #3a67a0;
+  --on-accent: #ffffff;
+
+  /* Night sky: the header band, chart and statement panels. Stays dark in
+     both themes. `night-deep` is the footer; `steel` is the contact card. */
+  --night: #0f2342;
+  --night-raised: #17305a;
+  --night-deep: #0a1a33;
+  --on-night: #e8edf7;
+  --on-night-60: rgba(232, 237, 247, 0.68);
+  --on-night-12: rgba(232, 237, 247, 0.14);
+  --on-night-6: rgba(232, 237, 247, 0.07);
+  --accent-night: #8fb0e0;
+
+  --steel: #416c9c;
+  --on-steel: #ffffff;
+  --on-steel-24: rgba(255, 255, 255, 0.28);
+
+  --ease-house: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --page: #08111f;
+    --surface: #0d1a2e;
+    --well: #13223b;
+
+    --ink-100: #e8edf7;
+    --ink-80: rgba(232, 237, 247, 0.84);
+    --ink-60: rgba(232, 237, 247, 0.68);
+    --ink-44: rgba(232, 237, 247, 0.46);
+    --ink-12: rgba(232, 237, 247, 0.13);
+    --ink-4: rgba(232, 237, 247, 0.04);
+
+    --accent: #8fb0e0;
+    --on-accent: #08111f;
   }
 }
 
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-well: var(--well);
+
+  --color-ink-100: var(--ink-100);
+  --color-ink-80: var(--ink-80);
+  --color-ink-60: var(--ink-60);
+  --color-ink-44: var(--ink-44);
+  --color-ink-12: var(--ink-12);
+  --color-ink-4: var(--ink-4);
+
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+
+  --color-night: var(--night);
+  --color-night-raised: var(--night-raised);
+  --color-night-deep: var(--night-deep);
+  --color-on-night: var(--on-night);
+  --color-on-night-60: var(--on-night-60);
+  --color-on-night-12: var(--on-night-12);
+  --color-on-night-6: var(--on-night-6);
+  --color-accent-night: var(--accent-night);
+
+  --color-steel: var(--steel);
+  --color-on-steel: var(--on-steel);
+  --color-on-steel-24: var(--on-steel-24);
+
+  --font-display: var(--font-hanken), sans-serif;
+  --font-sans: var(--font-hanken), sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
+
+  --radius-card: 16px;
+  --radius-panel: 12px;
+  --radius-nested: 8px;
+
+  --container-page: 1280px;
+  --container-reading: 960px;
+}
+
+/* --- Type scale -------------------------------------------------
+   One family, sentence case throughout. Headlines are set at regular
+   weight and large numerals at light; the only emphasis is a single step
+   up to 500 for small headings. Bundled as @utility so family, size,
+   line, tracking and weight always travel together.
+   ---------------------------------------------------------------- */
+@utility text-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.375rem, 4.6vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+@utility text-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.125rem, 3.6vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.028em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+@utility text-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 2.5vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.022em;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+@utility text-h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.1875rem, 1.5vw, 1.375rem);
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+@utility text-h4 {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  letter-spacing: -0.006em;
+  font-weight: 500;
+  text-wrap: pretty;
+}
+
+@utility text-stat {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility text-p1 {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  font-weight: 400;
+  text-wrap: pretty;
+}
+
+@utility text-p2 {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 400;
+  text-wrap: pretty;
+}
+
+@utility text-caption {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* Chart coordinates: same face, tabular figures, so columns of numbers align. */
+@utility text-coord {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility text-cta {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1;
+  font-weight: 500;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink-100);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* On night the steel accent is too dim for a focus ring. */
+.on-night :focus-visible,
+.band-grid :focus-visible {
+  outline-color: var(--color-accent-night);
+}
+
+/* --- Links --------------------------------------------------------
+   An underline that sits low and thin, thickening on hover. */
+.link {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+  text-decoration-color: var(--color-ink-44);
+  transition: text-decoration-color 0.2s, text-decoration-thickness 0.2s;
+}
+
+.link:hover {
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+
+/* --- Header band --------------------------------------------------
+   Every page opens on the navy band. Faint column lines run down it,
+   the same graticule that is drawn on the chart. The lines start and
+   stop on the content edges. */
+.band-grid {
+  position: relative;
+  isolation: isolate;
+}
+
+.band-grid::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: max(1rem, calc((100% - 1280px) / 2 + 1.5rem));
+  right: max(1rem, calc((100% - 1280px) / 2 + 1.5rem));
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    var(--on-night-6) 1px,
+    transparent 1px
+  );
+  background-size: 25% 100%;
+  border-right: 1px solid var(--on-night-6);
+}
+
+/* The column lines are drawn down from the top as the page opens. */
+.band-grid::before {
+  transform-origin: 50% 0;
+  animation: ns-grow-y 1.6s var(--ease-house) 0.1s both;
+}
+
+@keyframes ns-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* --- Page-load sequence -------------------------------------------
+   Headline lines rise out of a mask, one after another; the rest of the
+   hero follows. This is the one orchestrated entrance on each page. */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.mask-line > span {
+  display: block;
+  animation: ns-rise 1.1s var(--ease-house) both;
+  animation-delay: var(--ld, 0.2s);
+}
+
+@keyframes ns-rise {
+  from {
+    transform: translateY(108%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.after-headline {
+  animation: ns-appear 0.9s ease-out both;
+  animation-delay: var(--ld, 0.7s);
+}
+
+/* --- Scroll reveals (see Reveal) ----------------------------------
+   Each type says something different: rules are drawn, plates are
+   opened, text simply arrives. Nothing slides up. */
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease-house) var(--rd, 0ms),
+    transform 1s var(--ease-house) var(--rd, 0ms),
+    clip-path 1.1s var(--ease-house) var(--rd, 0ms);
+}
+
+[data-reveal="fade"][data-in="false"] {
+  opacity: 0;
+}
+
+/* The wipe clips the child, never the observed element itself: a box clipped
+   to nothing counts as not intersecting, so it would never be revealed. */
+[data-reveal="wipe"] > * {
+  transition: clip-path 1.1s var(--ease-house) var(--rd, 0ms);
+}
+
+[data-reveal="wipe"][data-in="false"] > * {
+  clip-path: inset(0 0 100% 0);
+}
+
+[data-reveal="wipe"][data-in="true"] > * {
+  clip-path: inset(0 0 0 0);
+}
+
+[data-reveal="rule"] {
+  transform-origin: 0 50%;
+}
+
+[data-reveal="rule"][data-in="false"] {
+  transform: scaleX(0);
+}
+
+[data-reveal="grow"] {
+  transform-origin: 50% 0;
+}
+
+[data-reveal="grow"][data-in="false"] {
+  transform: scaleY(0);
+}
+
+/* Numerals count up from zero when their card arrives. The value is a
+   registered integer so the browser can animate it; `--to` is the end. */
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.count {
+  --num: var(--to, 0);
+  counter-reset: num var(--num);
+  animation: ns-count 1.8s var(--ease-house) both;
+  animation-play-state: paused;
+}
+
+.count::after {
+  content: counter(num);
+}
+
+[data-in="true"] .count,
+[data-in="true"].count {
+  animation-play-state: running;
+}
+
+@keyframes ns-count {
+  from {
+    --num: 0;
+  }
+}
+
+/* A problem space's constellation draws itself when its cell arrives. */
+.glyph-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+[data-in="true"] .glyph-line {
+  animation: ns-draw 1.4s var(--ease-house) both;
+  animation-delay: var(--d, 0.3s);
+}
+
+.glyph-star {
+  opacity: 0;
+}
+
+[data-in="true"] .glyph-star {
+  animation: ns-appear 0.7s ease-out both;
+  animation-delay: var(--d, 0s);
+}
+
+/* --- Responses to a person ---------------------------------------- */
+
+/* Arrow on a button leans forward when the button is hovered. */
+.nudge {
+  transition: transform 0.3s var(--ease-house);
+}
+
+.group:hover .nudge,
+a:hover > .nudge {
+  transform: translateX(4px);
+}
+
+/* A plate's star sends out a ring when its card is hovered. */
+.plate-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.group:hover .plate-ping {
+  animation: ns-ping 1.4s ease-out infinite;
+}
+
+@keyframes ns-ping {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* The sky behind the products turns once every five minutes. */
+.sky-turn {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: ns-turn 300s linear infinite;
+}
+
+@keyframes ns-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scroll progress: a bearing line under the nav, scrubbed by the page
+   scroll. Browsers without scroll-driven animation simply don't show it. */
+.scroll-bearing {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-bearing {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 2px;
+    width: 100%;
+    background: var(--accent-night);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    animation: ns-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes ns-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* --- Custom cursor (see CustomCursor) ------------------------------
+   Only active once the component has marked <html> and only for a fine
+   pointer, so touch devices and no-JS visitors keep the normal cursor. */
+.has-cursor,
+.has-cursor * {
+  cursor: none !important;
+}
+
+.cursor {
+  --c: var(--ink-100);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.cursor[data-visible="true"] {
+  opacity: 1;
+}
+
+.cursor[data-tone="night"] {
+  --c: var(--on-night);
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.cursor-dot i,
+.cursor-ring i {
+  display: block;
+  border-radius: 9999px;
+  transition:
+    transform 0.45s var(--ease-house),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.cursor-dot i {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--c);
+}
+
+.cursor-ring i {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid var(--c);
+}
+
+/* Over anything clickable the ring swells and the dot gives way to it. */
+.cursor[data-hover="true"] .cursor-ring i {
+  transform: scale(1.6);
+  background: color-mix(in srgb, var(--c) 10%, transparent);
+}
+
+.cursor[data-hover="true"] .cursor-dot i {
+  transform: scale(0);
+}
+
+.cursor[data-down="true"] .cursor-ring i {
+  transform: scale(0.8);
+}
+
+.cursor[data-down="true"][data-hover="true"] .cursor-ring i {
+  transform: scale(1.35);
+}
+
+/* --- Star chart ---------------------------------------------------- */
+
+/* The one orchestrated moment: constellation lines are drawn, star by star. */
+@keyframes ns-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ns-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chart-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ns-draw 1.6s var(--ease-house) both;
+  animation-delay: var(--d, 0.4s);
+}
+
+.chart-star {
+  animation: ns-appear 0.8s ease-out both;
+  animation-delay: var(--d, 0s);
+}
+
+/* Screen gallery lightbox. A fixed layer (not a native dialog) so the site's
+   cursor, at a higher z-index, stays visible above it. */
+.gallery-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--night-deep) 90%, transparent);
+  backdrop-filter: blur(6px);
+  animation: ns-appear 0.3s ease-out both;
+}
+
+.gallery-stage {
+  width: min(1100px, 100%);
+}
+
+/* Detail text swaps quietly when a different star is chosen. */
+.swap {
+  animation: ns-appear 0.35s ease-out both;
+}
+
+/* The hero readout fades out, changes while invisible, and fades back in.
+   Its height is fixed so a longer description never moves what is beneath it. */
+.readout {
+  min-height: 11.5rem;
+  transition: opacity 0.38s ease;
+}
+
+.readout[data-fading="true"] {
+  opacity: 0;
+}
+
+/* The highlight glides: ring, bearing line and star colour are all
+   transitions, so changing the highlighted star is one continuous move. */
+.chart-ring {
+  transition: transform 1.3s var(--ease-house);
+}
+
+.chart-ring circle {
+  r: var(--r, 2.5px);
+  transition: r 1.3s var(--ease-house);
+}
+
+.chart-bearing {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform 1.3s var(--ease-house);
+}
+
+.chart-bearing line {
+  transition: stroke-dasharray 1.3s var(--ease-house);
+}
+
+.chart-dot {
+  transition: fill 0.9s ease;
+}
+
+/* Time left on the current product, as a hairline that fills left to right. */
+.hero-progress {
+  transform-origin: 0 50%;
+  animation: ns-progress-x linear both;
+}
+
+@keyframes ns-progress-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Product plates: the plate brightens a touch when its card is hovered. */
+.plate {
+  transition: filter 0.3s;
+}
+
+.group:hover .plate {
+  filter: brightness(1.12);
+}
+
+/* --- Logo mark idle motion (brand page only) ----------------------- */
+
+@keyframes ns-orbit-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0.8px, -1.4px);
+  }
+}
+
+@keyframes ns-orbit-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-1.1px, 0.9px);
+  }
+}
+
+@keyframes ns-orbit-c {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0.6px, 1.1px);
+  }
+}
+
+@keyframes ns-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ns-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+
+  .scroll-bearing {
+    display: none !important;
+  }
+
+  .sky-turn {
+    animation: none;
+  }
 }
