@@ -112,7 +112,7 @@ export default function WorkPage() {
                             <a
                               href={product.download.href}
                               download
-                              className="inline-flex items-center rounded-full bg-ink-100 px-5 py-2.5 text-cta text-on-night no-underline transition-opacity duration-200 hover:opacity-85"
+                              className="inline-flex items-center rounded-nested bg-accent px-5 py-3 text-cta text-on-accent no-underline transition-opacity duration-200 hover:opacity-85"
                             >
                               {product.download.label}
                             </a>

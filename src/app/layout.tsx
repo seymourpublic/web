@@ -17,7 +17,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://northstar.tech"),
+  metadataBase: new URL("https://northstartechnology.co.za"),
   title: {
     default: "Northstar Technology",
     template: "%s — Northstar Technology",

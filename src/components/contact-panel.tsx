@@ -51,7 +51,7 @@ export function ContactPanel() {
         </p>
         <div>
           <a
-            href="mailto:hello@northstar.tech"
+            href="mailto:hello@northstartechnology.co.za"
             className="inline-block rounded-nested bg-on-night px-5 py-3 text-cta text-night no-underline transition-colors duration-200 hover:bg-accent-night"
           >
             Send a message

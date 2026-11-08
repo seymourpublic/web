@@ -83,10 +83,10 @@ export const products: Product[] = [
       "A free, open-source desktop app for working with PDFs: read, edit text and images, fill forms, annotate, organize pages, redact, run OCR and sign with certificates, without the weight of legacy PDF software. Everything runs on your own machine, with no account and no uploads.",
     download: {
       label: "Download Folio for Windows",
-      href: "/downloads/Folio-Setup.exe",
+      href: "https://github.com/seymourpublic/Folio/releases/latest/download/Folio-Setup.exe",
       note: "Version 0.1.0, 198 MB, free. Windows 10 or later, 64-bit. The installer is not yet code-signed, so Windows may ask you to confirm.",
     },
-    source: "https://github.com/naledisandamela/folio",
+    source: "https://github.com/seymourpublic/Folio",
     slot: "Product visual — FOLIO",
     logo: "/brand/folio.png",
     screens: [
@@ -302,15 +302,15 @@ export const pressItems: {
 ];
 
 export const contactRows = [
-  { label: "General", value: "hello@northstar.tech" },
-  { label: "Press", value: "press@northstar.tech" },
-  { label: "Careers", value: "careers@northstar.tech" },
+  { label: "General", value: "hello@northstartechnology.co.za" },
+  { label: "Press", value: "press@northstartechnology.co.za" },
+  { label: "Careers", value: "careers@northstartechnology.co.za" },
 ];
 
 export const faqs = [
   {
     q: "Does Northstar take client work?",
-    a: "Yes, alongside our own products. Products start from problems we chose to take seriously ourselves. Projects, like the All Grace Properties website, are built for clients who bring theirs. Write to hello@northstar.tech to talk about one.",
+    a: "Yes, alongside our own products. Products start from problems we chose to take seriously ourselves. Projects, like the All Grace Properties website, are built for clients who bring theirs. Write to hello@northstartechnology.co.za to talk about one.",
   },
   {
     q: "What does Northstar build?",
@@ -322,6 +322,6 @@ export const faqs = [
   },
   {
     q: "How do I reach the right person?",
-    a: "General enquiries go to hello@northstar.tech, press to press@northstar.tech, and careers to careers@northstar.tech.",
+    a: "General enquiries go to hello@northstartechnology.co.za, press to press@northstartechnology.co.za, and careers to careers@northstartechnology.co.za.",
   },
 ];

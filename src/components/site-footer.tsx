@@ -38,10 +38,10 @@ export function SiteFooter() {
               solving carefully, then we get out of the way.
             </p>
             <a
-              href="mailto:hello@northstar.tech"
-              className="inline-block rounded-nested bg-on-night px-5 py-3 text-cta text-night no-underline transition-colors duration-200 hover:bg-accent-night"
+              href="mailto:hello@northstartechnology.co.za"
+              className="inline-block rounded-nested bg-on-night px-5 py-3 text-cta break-all text-night no-underline transition-colors duration-200 hover:bg-accent-night"
             >
-              hello@northstar.tech
+              hello@northstartechnology.co.za
             </a>
           </div>
 

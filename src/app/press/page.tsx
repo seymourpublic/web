@@ -8,7 +8,7 @@ import { displayUrl, pressItems } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Press",
   description:
-    "Launches and updates from Northstar Technology. Press inquiries: press@northstar.tech",
+    "Launches and updates from Northstar Technology. Press inquiries: press@northstartechnology.co.za",
 };
 
 export default function PressPage() {
@@ -22,8 +22,8 @@ export default function PressPage() {
           <p className="m-0">
             What has gone live and what is changing. For press inquiries, media
             kits or interviews, write to{" "}
-            <a href="mailto:press@northstar.tech" className="link text-accent-night">
-              press@northstar.tech
+            <a href="mailto:press@northstartechnology.co.za" className="link text-accent-night">
+              press@northstartechnology.co.za
             </a>
             .
           </p>
